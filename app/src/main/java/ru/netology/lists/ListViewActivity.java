@@ -2,6 +2,7 @@ package ru.netology.lists;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,10 +45,10 @@ public class ListViewActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         swipeLayout = findViewById(R.id.swiperefresh);
 
-
-        myEditor.putString(DATA, getString(R.string.large_text));
-        myEditor.apply();
-
+if(SharepRef()) {
+    myEditor.putString(DATA, getString(R.string.large_text));
+    myEditor.apply();
+}
         prepareContent();
 
         listContentAdapter = createAdapter(simpleAdapterContent);
@@ -86,6 +87,15 @@ public class ListViewActivity extends AppCompatActivity {
             temp.put(KEY1, arrayContent[i]);
             temp.put(KEY2, String.valueOf(arrayContent[i].length()));
             simpleAdapterContent.add(temp);
+        }
+    }
+    private Boolean SharepRef(){
+        String result = sharedPref.getString(DATA, "");
+        Log.d("Log", result);
+        if(result.equals("")){
+            return true;
+        }else {
+            return false;
         }
     }
 }
