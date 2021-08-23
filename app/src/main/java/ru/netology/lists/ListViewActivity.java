@@ -2,6 +2,7 @@ package ru.netology.lists;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +33,8 @@ public class ListViewActivity extends AppCompatActivity {
     SharedPreferences.Editor myEditor;
     SwipeRefreshLayout swipeLayout;
     BaseAdapter listContentAdapter;
+
+    ArrayList<Integer> Arlist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ if(SharepRef()) {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 simpleAdapterContent.remove(i);
+                Arlist.add(i);
                 listContentAdapter.notifyDataSetChanged();
             }
         });
@@ -97,6 +101,25 @@ if(SharepRef()) {
         }else {
             return false;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putIntegerArrayList("One",Arlist);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Arlist = savedInstanceState.getIntegerArrayList("one");
+        for(int i = 0; i < simpleAdapterContent.size(); i++){
+            for(int k = 0; k < (Arlist != null ? Arlist.size() : 0); k++){
+                if (i == Arlist.get(k)){
+                    simpleAdapterContent.remove(i);
+                }
+            }
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }
 
